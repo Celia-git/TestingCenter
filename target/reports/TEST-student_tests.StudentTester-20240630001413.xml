@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="student_tests.StudentTester-20240630001413" tests="5" file="student_tests.py" time="0.006" timestamp="2024-06-30T00:14:14" failures="0" errors="0" skipped="0">
+	<testcase classname="student_tests.StudentTester" name="test_aNum" time="0.001" timestamp="2024-06-30T00:14:13"/>
+	<testcase classname="student_tests.StudentTester" name="test_courses" time="0.002" timestamp="2024-06-30T00:14:13"/>
+	<testcase classname="student_tests.StudentTester" name="test_has_course" time="0.001" timestamp="2024-06-30T00:14:14"/>
+	<testcase classname="student_tests.StudentTester" name="test_name" time="0.001" timestamp="2024-06-30T00:14:14"/>
+	<testcase classname="student_tests.StudentTester" name="test_visits" time="0.001" timestamp="2024-06-30T00:14:14"/>
+</testsuite>

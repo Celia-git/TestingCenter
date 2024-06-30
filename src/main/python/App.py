@@ -6,8 +6,8 @@ from datetime import datetime
 import os
 import copy
 import openpyxl
-from Date import Date, Visitors
-from Student import Student
+from .Date import Date, Visitors
+from .Student import Student
 
 data_path = "data\\Visitors.xlsx"
 courses_path = "data\\Courses.txt"
@@ -61,6 +61,8 @@ class ContainerFrame(tk.Frame):
         self.date_label.pack(side=tk.TOP)
         self.back_but.pack(side=tk.BOTTOM)
         # Create frames
+        
+        self.a_num = tk.StringVar()
         self.default_frame = DefaultFrame(self)
         self.student_frame = StudentFrame(self)
         self.date_frame = DateFrame(self)
@@ -112,7 +114,8 @@ class ContainerFrame(tk.Frame):
         top_frame.pack(padx=25, pady=25, side=tk.TOP, fill=tk.BOTH, expand=True)
         
     # Returns true if string is A00 followed by six digits
-    def is_valid_Anumber(self, string_anumber):
+    def is_valid_Anumber(self):
+        string_anumber = self.a_num.get()
         if string_anumber.startswith("A00") and len(string_anumber)==9:
             i = 3
             while i<9:
@@ -121,7 +124,6 @@ class ContainerFrame(tk.Frame):
                 i+=1
             return True
         return False
-
 
 
 # Default Program window
@@ -135,14 +137,11 @@ class DefaultFrame(tk.Frame):
         self.columnconfigure(3, weight=2)
         self.rowconfigure((0,1,2), weight=1)
 
-        # Variables
-        self.container.a_num = tk.StringVar()
-
         # Create widgets
         self.error_label = tk.Label(self, font=FONT, text="")
         a_label = tk.Label(self, text="A Number:", font=FONT, pady=10)
         v_label = tk.Label(self, text="View Logs by Date:", font=FONT, pady=10)
-        self.entry = tk.Entry(self, textvariable=container.a_num, font=FONT)
+        self.entry = tk.Entry(self, textvariable=self.container.a_num, font=FONT)
         view_but = tk.Button(self, text="Logs", font=FONT, command=self.view, pady=10)
         submit_but = tk.Button(self, text="Go", font=FONT, command=self.submit, pady=10)
         self.entry.bind("<Return>", self.submit)
@@ -161,7 +160,7 @@ class DefaultFrame(tk.Frame):
 
     # Open Student Log
     def submit(self, *event):
-        if self.is_valid_Anumber(str(self.container.a_num.get())):
+        if self.container.is_valid_Anumber():
             self.error_label.config(text="")
             self.container.swap(1)
         else:
@@ -180,7 +179,6 @@ class StudentFrame(tk.Frame):
         
         #Variables
         self.container = container
-        self.container.a_num=tk.StringVar()
         self.name = tk.StringVar()
         self.course=tk.StringVar()
         self.section=tk.StringVar()

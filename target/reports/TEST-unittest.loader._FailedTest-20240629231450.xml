@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="unittest.loader._FailedTest-20240629231450" tests="3" file="unittest/loader.py" time="0.006" timestamp="2024-06-29T23:14:50" failures="0" errors="3" skipped="0">
+	<testcase classname="unittest.loader._FailedTest" name="app_tests" time="0.003" timestamp="2024-06-29T23:14:50">
+		<error type="ImportError" message="Failed to import test module: app_tests
+Traceback (most recent call last):
+  File &quot;C:\Users\Celia\AppData\Local\Programs\Python\Python312\Lib\unittest\loader.py&quot;, line 129, in loadTestsFromName
+    module = __import__(module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;c:\users\celia\python_scripts\testingcenter\src\unittest\python\app_tests.py&quot;, line 3, in &lt;module&gt;
+    from __init__ import *
+  File &quot;c:\users\celia\python_scripts\testingcenter\src\unittest\python\__init__.py&quot;, line 2, in &lt;module&gt;
+    from src.main.python.Date import Date
+ModuleNotFoundError: No module named 'src'
+"><![CDATA[Traceback (most recent call last):
+  File "C:\Users\Celia\AppData\Local\Programs\Python\Python312\Lib\unittest\case.py", line 58, in testPartExecutor
+    yield
+  File "C:\Users\Celia\AppData\Local\Programs\Python\Python312\Lib\unittest\case.py", line 634, in run
+    self._callTestMethod(testMethod)
+    ^^^^^^^^^^^^^^^^^
+  File "C:\Users\Celia\AppData\Local\Programs\Python\Python312\Lib\unittest\case.py", line 589, in _callTestMethod
+    if method() is not None:
+    ^^^^^^^^^^^^^^^^^
+  File "C:\Users\Celia\AppData\Local\Programs\Python\Python312\Lib\unittest\loader.py", line 33, in testFailure
+    raise self._exception
+    ^^^^^^^^^^^^^^^^^
+ImportError: Failed to import test module: app_tests
+Traceback (most recent call last):
+  File "C:\Users\Celia\AppData\Local\Programs\Python\Python312\Lib\unittest\loader.py", line 129, in loadTestsFromName
+    module = __import__(module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\users\celia\python_scripts\testingcenter\src\unittest\python\app_tests.py", line 3, in <module>
+    from __init__ import *
+  File "c:\users\celia\python_scripts\testingcenter\src\unittest\python\__init__.py", line 2, in <module>
+    from src.main.python.Date import Date
+ModuleNotFoundError: No module named 'src'
+
+]]></error>
+	</testcase>
+	<testcase classname="unittest.loader._FailedTest" name="date_tests" time="0.002" timestamp="2024-06-29T23:14:50">
+		<error type="ImportError" message="Failed to import test module: date_tests
+Traceback (most recent call last):
+  File &quot;C:\Users\Celia\AppData\Local\Programs\Python\Python312\Lib\unittest\loader.py&quot;, line 129, in loadTestsFromName
+    module = __import__(module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;c:\users\celia\python_scripts\testingcenter\src\unittest\python\date_tests.py&quot;, line 3, in &lt;module&gt;
+    from __init__ import *
+  File &quot;c:\users\celia\python_scripts\testingcenter\src\unittest\python\__init__.py&quot;, line 2, in &lt;module&gt;
+    from src.main.python.Date import Date
+ModuleNotFoundError: No module named 'src'
+"><![CDATA[Traceback (most recent call last):
+  File "C:\Users\Celia\AppData\Local\Programs\Python\Python312\Lib\unittest\case.py", line 58, in testPartExecutor
+    yield
+  File "C:\Users\Celia\AppData\Local\Programs\Python\Python312\Lib\unittest\case.py", line 634, in run
+    self._callTestMethod(testMethod)
+    ^^^^^^^^^^^^^^^^^
+  File "C:\Users\Celia\AppData\Local\Programs\Python\Python312\Lib\unittest\case.py", line 589, in _callTestMethod
+    if method() is not None:
+    ^^^^^^^^^^^^^^^^^
+  File "C:\Users\Celia\AppData\Local\Programs\Python\Python312\Lib\unittest\loader.py", line 33, in testFailure
+    raise self._exception
+    ^^^^^^^^^^^^^^^^^
+ImportError: Failed to import test module: date_tests
+Traceback (most recent call last):
+  File "C:\Users\Celia\AppData\Local\Programs\Python\Python312\Lib\unittest\loader.py", line 129, in loadTestsFromName
+    module = __import__(module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\users\celia\python_scripts\testingcenter\src\unittest\python\date_tests.py", line 3, in <module>
+    from __init__ import *
+  File "c:\users\celia\python_scripts\testingcenter\src\unittest\python\__init__.py", line 2, in <module>
+    from src.main.python.Date import Date
+ModuleNotFoundError: No module named 'src'
+
+]]></error>
+	</testcase>
+	<testcase classname="unittest.loader._FailedTest" name="student_tests" time="0.001" timestamp="2024-06-29T23:14:50">
+		<error type="ImportError" message="Failed to import test module: student_tests
+Traceback (most recent call last):
+  File &quot;C:\Users\Celia\AppData\Local\Programs\Python\Python312\Lib\unittest\loader.py&quot;, line 129, in loadTestsFromName
+    module = __import__(module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;c:\users\celia\python_scripts\testingcenter\src\unittest\python\student_tests.py&quot;, line 3, in &lt;module&gt;
+    from __init__ import *
+  File &quot;c:\users\celia\python_scripts\testingcenter\src\unittest\python\__init__.py&quot;, line 2, in &lt;module&gt;
+    from src.main.python.Date import Date
+ModuleNotFoundError: No module named 'src'
+"><![CDATA[Traceback (most recent call last):
+  File "C:\Users\Celia\AppData\Local\Programs\Python\Python312\Lib\unittest\case.py", line 58, in testPartExecutor
+    yield
+  File "C:\Users\Celia\AppData\Local\Programs\Python\Python312\Lib\unittest\case.py", line 634, in run
+    self._callTestMethod(testMethod)
+    ^^^^^^^^^^^^^^^^^
+  File "C:\Users\Celia\AppData\Local\Programs\Python\Python312\Lib\unittest\case.py", line 589, in _callTestMethod
+    if method() is not None:
+    ^^^^^^^^^^^^^^^^^
+  File "C:\Users\Celia\AppData\Local\Programs\Python\Python312\Lib\unittest\loader.py", line 33, in testFailure
+    raise self._exception
+    ^^^^^^^^^^^^^^^^^
+ImportError: Failed to import test module: student_tests
+Traceback (most recent call last):
+  File "C:\Users\Celia\AppData\Local\Programs\Python\Python312\Lib\unittest\loader.py", line 129, in loadTestsFromName
+    module = __import__(module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\users\celia\python_scripts\testingcenter\src\unittest\python\student_tests.py", line 3, in <module>
+    from __init__ import *
+  File "c:\users\celia\python_scripts\testingcenter\src\unittest\python\__init__.py", line 2, in <module>
+    from src.main.python.Date import Date
+ModuleNotFoundError: No module named 'src'
+
+]]></error>
+	</testcase>
+</testsuite>

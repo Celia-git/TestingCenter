@@ -1,0 +1,5 @@
+ERROR: Invalid requirement: 'src\\main\\python\\App'
+Hint: It looks like a path. File 'src\main\python\App' does not exist.
+
+[notice] A new release of pip is available: 23.3.1 -> 24.1.1
+[notice] To update, run: python.exe -m pip install --upgrade pip

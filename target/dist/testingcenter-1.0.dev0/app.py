@@ -1,29 +1,32 @@
 
 import tkinter as tk
-from tkinter import Frame, Label, ttk
+from tkinter import ttk
 import ctypes
 from datetime import datetime
 import os
-from pathlib import Path
 import copy
 import openpyxl
+from .Date import Date, Visitors
+from .Student import Student
+
+data_path = "data\\Visitors.xlsx"
+courses_path = "data\\Courses.txt"
 
 FONT = ("calibre", 12, "bold")
 backgrounds = {"blue":"#A8DADC", "grey":"#CFD8DC", "white":"#ECEFF1"}
 
 class App(tk.Tk):
-    def __init__(self, data_path, courses_path, date, visitors, student):
-        
+    def __init__(self):
         # If Data files do not exist, create them
         if not os.path.exists(data_path):
             wb = openpyxl.Workbook()
             # Create Each Sheet
-            for key in self.visitor_class.keys():
+            for key in Visitors.keys():
                 sheet = wb.create_sheet(key)
                 sheet.title = key
                 # Add Each column
                 col = 1
-                for val in self.visitor_class[key].keys():
+                for val in Visitors[key].keys():
                     sheet.cell(row=1, column=col).value = val
                     col +=1
             wb.save(filename = data_path)
@@ -36,14 +39,14 @@ class App(tk.Tk):
         self.geometry("900x600")
 
         # popup the Window
-        container_frame = ContainerFrame(self, courses_path, data_path, date, visitors, student)
+        container_frame = ContainerFrame(self)
         container_frame.pack(padx=50, pady=50, fill=tk.BOTH, side=tk.TOP) 
         container_frame.swap(0)
 
 
 # Control Frame: Holds all sub frames
 class ContainerFrame(tk.Frame):
-    def __init__(self, container, courses_path, data_path, date, visitors, student):
+    def __init__(self, container):
         super().__init__(container)
 
         # Get Current Date
@@ -58,9 +61,11 @@ class ContainerFrame(tk.Frame):
         self.date_label.pack(side=tk.TOP)
         self.back_but.pack(side=tk.BOTTOM)
         # Create frames
+        
+        self.a_num = tk.StringVar()
         self.default_frame = DefaultFrame(self)
-        self.student_frame = StudentFrame(self, courses_path, student, visitors, data_path, date)
-        self.date_frame = DateFrame(self, data_path, date, visitors)
+        self.student_frame = StudentFrame(self)
+        self.date_frame = DateFrame(self)
         self.time()
 
     # Refresh time clock
@@ -77,14 +82,14 @@ class ContainerFrame(tk.Frame):
         self.student_frame.discard(True)
         self.date_frame.clear_display()
         self.date_frame.pack_forget()
-        self.default_frame.a_num.set("")
+        self.a_num.set("")
         self.default_frame.entry.focus_set()
         return self.default_frame
 
     # Student Frame
     def load_student_frame(self):
         self.back_but["state"] = "normal"
-        self.student_frame.load_student(self.default_frame.a_num.get())
+        self.student_frame.load_student(self.a_num.get())
         self.date_frame.pack_forget()
         self.default_frame.pack_forget()
         return self.student_frame
@@ -104,9 +109,21 @@ class ContainerFrame(tk.Frame):
             2: self.load_date_frame
 
         }
-        next = switch.get(frame_idx, lambda: "Invalid Window Index")
+        next = switch.get(frame_idx, "Invalid Window Index")
         top_frame = next()
         top_frame.pack(padx=25, pady=25, side=tk.TOP, fill=tk.BOTH, expand=True)
+        
+    # Returns true if string is A00 followed by six digits
+    def is_valid_Anumber(self):
+        string_anumber = self.a_num.get()
+        if string_anumber.startswith("A00") and len(string_anumber)==9:
+            i = 3
+            while i<9:
+                if not string_anumber[i].isdigit():
+                    return False
+                i+=1
+            return True
+        return False
 
 
 # Default Program window
@@ -120,14 +137,11 @@ class DefaultFrame(tk.Frame):
         self.columnconfigure(3, weight=2)
         self.rowconfigure((0,1,2), weight=1)
 
-        # Variables
-        self.a_num = tk.StringVar()
-
         # Create widgets
         self.error_label = tk.Label(self, font=FONT, text="")
         a_label = tk.Label(self, text="A Number:", font=FONT, pady=10)
         v_label = tk.Label(self, text="View Logs by Date:", font=FONT, pady=10)
-        self.entry = tk.Entry(self, textvariable=self.a_num, font=FONT)
+        self.entry = tk.Entry(self, textvariable=self.container.a_num, font=FONT)
         view_but = tk.Button(self, text="Logs", font=FONT, command=self.view, pady=10)
         submit_but = tk.Button(self, text="Go", font=FONT, command=self.submit, pady=10)
         self.entry.bind("<Return>", self.submit)
@@ -146,46 +160,30 @@ class DefaultFrame(tk.Frame):
 
     # Open Student Log
     def submit(self, *event):
-        if self.is_valid_Anumber(str(self.a_num.get())):
+        if self.container.is_valid_Anumber():
             self.error_label.config(text="")
             self.container.swap(1)
         else:
-            self.error_label.config(text="Error: %s: not a valid A Number\nEnter a student ID which starts with A00 and ends with six digits" % self.a_num.get())
+            self.error_label.config(text="Error: %s: not a valid A Number\nEnter a student ID which starts with A00 and ends with six digits" % self.container.a_num.get())
 
     # View date logs
     def view(self):
         self.error_label.config(text="")
         self.container.swap(2)
-    
-        # Returns true if string is A00 followed by six digits
-    def is_valid_Anumber(self, string_anumber):
-        if string_anumber.startswith("A00") and len(string_anumber)==9:
-            i = 3
-            while i<9:
-                if not string_anumber[i].isdigit():
-                    return False
-                i+=1
-            return True
-        return False
 
 
 # Show student log window
 class StudentFrame(tk.Frame):
-    def __init__(self, container, courses_path, student, visitor, data_path, date):
+    def __init__(self, container):
         super().__init__(container)
         
         #Variables
         self.container = container
-        self.a_num=tk.StringVar()
         self.name = tk.StringVar()
         self.course=tk.StringVar()
         self.section=tk.StringVar()
         self.calc=tk.IntVar()
         self.test=tk.BooleanVar()
-        self.student_class = student
-        self.visitor_class = visitor
-        self.data_path = data_path
-        self.date_class = date
         
         # Load Courses from txt
         file = open(courses_path)
@@ -218,7 +216,7 @@ class StudentFrame(tk.Frame):
         self.log_visit.columnconfigure((0,1,2), weight=1)
         self.log_visit.rowconfigure((0,1,2, 3), weight=1)
         a_label = tk.Label(self.log_visit, font=FONT, text="A Number: ", padx=5, pady=5)
-        a_value = tk.Label(self.log_visit, font=FONT, textvariable=self.a_num, padx=5, pady=5)
+        a_value = tk.Label(self.log_visit, font=FONT, textvariable=self.container.a_num, padx=5, pady=5)
         n_label = tk.Label(self.log_visit, font=FONT, text="Name: ", padx=5, pady=5)
         n_value = tk.Entry(self.log_visit, font=FONT, textvariable=self.name)
         cor_label = tk.Label(self.log_visit, font=FONT, text="Student's Courses: ", padx=5, pady=5)
@@ -257,9 +255,9 @@ class StudentFrame(tk.Frame):
 
     # Load Student data from file
     def load_student(self, a_num):
-        self.student = self.student_class(self.data_path, a_num)
-        self.date_log = self.date_class(self.data_path)
-        self.a_num.set(a_num)
+        self.student = Student(data_path, a_num)
+        self.date_log = Date(data_path)
+        self.container.a_num.set(a_num)
         self.name.set(self.student.get_name())
         self.test.set(True)
         
@@ -319,12 +317,12 @@ class StudentFrame(tk.Frame):
     def save(self):
 
         # Gather All Values for Date Log
-        date_dict = copy.deepcopy(self.visitor_class["Date"])
+        date_dict = copy.deepcopy(Visitors["Date"])
         for key in date_dict.keys():
             if key=="Date":
                 date_dict[key] = self.container.date
             elif key=="A Number":
-                date_dict[key] = self.a_num.get()
+                date_dict[key] = self.container.a_num.get()
             elif key=="Testing":
                 date_dict[key] = self.test.get()
             elif key=="Course":
@@ -336,10 +334,10 @@ class StudentFrame(tk.Frame):
             elif key=="Time In":
                 date_dict[key] = self.container.now.strftime('%H:%M')
         if self.date_log is None:
-            self.date_log = self.date_class(self.data_path)
+            self.date_log = Date(data_path)
 
         # Set All Student values
-        self.student.set_aNum(self.a_num.get())
+        self.student.set_aNum(self.container.a_num.get())
         self.student.set_name(self.name.get())
         self.student.add_visit(self.container.date)
         # Validate courses input
@@ -365,11 +363,11 @@ class StudentFrame(tk.Frame):
             self.discard()
         else:
             # Show error Message
-            self.error_label.config(text="IOError when writing to file. \nMake sure %s is closed"%self.data_path)
+            self.error_label.config(text="IOError when writing to file. \nMake sure %s is closed"%data_path)
     
     # Reset Entry Fields, go to default menu
     def discard(self, *stop):
-        self.a_num.set("")
+        self.container.a_num.set("")
         self.name.set("")
         self.course.set("")
         self.section.set("")
@@ -384,7 +382,7 @@ class StudentFrame(tk.Frame):
 
 # Show date log window
 class DateFrame(tk.Frame):
-    def __init__(self, container, data_path, date_class, visitor):
+    def __init__(self, container):
         super().__init__(container)
         
         # Variables
@@ -394,10 +392,8 @@ class DateFrame(tk.Frame):
         self.search_date.set(self.now.strftime("%m/%d/%y"))
         self.days_back = tk.IntVar()
         self.days_back.set(7)
-        self.data_path = data_path
-        self.date_class = date_class
-        self.visitor_class = visitor
-        
+
+
         # Create Frames + Canvas + Scrollbar
         self.entry = tk.Frame(self, padx=25, pady=25)
         self.entry.pack(side="top", fill=tk.X, expand=True, padx=40, pady=15)
@@ -444,12 +440,12 @@ class DateFrame(tk.Frame):
             entered_date = self.now.strftime("%m/%d/%y")
         
         # Get All entries from 'days_back' days from 'search_from'
-        self.date_log = self.date_class(self.data_path)
+        self.date_log = Date(data_path)
         loaded = self.date_log.load_data(entered_date, entered_days)
         
         # Row 0: Columns
         column = 0
-        for val in self.visitor_class["Date"].keys():
+        for val in Visitors["Date"].keys():
             if val=="Date":continue
             lab = tk.Label(self.display_frame, font=FONT, text=val, padx=10,pady=25)
             lab.grid(row=0, column=column)
@@ -478,6 +474,10 @@ class DateFrame(tk.Frame):
                     if column == 6 and entry == "None":
                         check_out = tk.Button(self.display_frame, font=FONT, text="Checkout", command=lambda this_date=date, this_anum=loaded[date][v][0], time_in=loaded[date][v][5]: self.checkout_student(this_date, this_anum, time_in))
                         check_out.grid(row=row, column=column, sticky="EW")
+                    # Add button to the A Number entry
+                    elif column == 0:
+                        anum_but = tk.Button(self.display_frame, font=FONT, text=entry, command=lambda anum=entry: self.show_student(anum))
+                        anum_but.grid(row=row, column=column, sticky="EW")
                     # Add label to normal entries
                     else:
                         this_entry = tk.Label(self.display_frame, font=FONT, text=entry, width=len(entry)+4, justify=tk.CENTER, bg=backgrounds[color])
@@ -488,6 +488,10 @@ class DateFrame(tk.Frame):
                 row += 1
             row += 1
             
+    def show_student(self, anum):
+        self.container.a_num = tk.StringVar(self, anum)
+        self.container.swap(1)
+
     # End visit by logging end
     def checkout_student(self, date, a_num, time_in):
         # Save all Values
@@ -497,7 +501,7 @@ class DateFrame(tk.Frame):
             self.display()
         else:
             # Show error Message
-            self.error_label.config(text="IOError when writing to file. \nMake sure %s is closed"%self.data_path)
+            self.error_label.config(text="IOError when writing to file. \nMake sure %s is closed"%data_path)
 
     def clear_display(self):
         for label in self.display_frame.grid_slaves():
@@ -511,7 +515,6 @@ class DateFrame(tk.Frame):
             return True
         except ValueError:
             return False                    
-
 
         
 

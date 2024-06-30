@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="date_tests.DateTester-20240630001055" tests="9" file="date_tests.py" time="0.281" timestamp="2024-06-30T00:10:56" failures="0" errors="0" skipped="0">
+	<testcase classname="date_tests.DateTester" name="test_compare" time="0.001" timestamp="2024-06-30T00:10:56"/>
+	<testcase classname="date_tests.DateTester" name="test_get_index" time="0.022" timestamp="2024-06-30T00:10:56"/>
+	<testcase classname="date_tests.DateTester" name="test_get_int_date" time="0.001" timestamp="2024-06-30T00:10:56"/>
+	<testcase classname="date_tests.DateTester" name="test_get_max_row" time="0.008" timestamp="2024-06-30T00:10:56"/>
+	<testcase classname="date_tests.DateTester" name="test_get_visits" time="0.054" timestamp="2024-06-30T00:10:56"/>
+	<testcase classname="date_tests.DateTester" name="test_load_data" time="0.053" timestamp="2024-06-30T00:10:56"/>
+	<testcase classname="date_tests.DateTester" name="test_month" time="0.001" timestamp="2024-06-30T00:10:56"/>
+	<testcase classname="date_tests.DateTester" name="test_save_data" time="0.105" timestamp="2024-06-30T00:10:56"/>
+	<testcase classname="date_tests.DateTester" name="test_save_student_checkout" time="0.036" timestamp="2024-06-30T00:10:56"/>
+</testsuite>
