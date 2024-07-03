@@ -1,5 +1,7 @@
 import datetime as dt
 import openpyxl
+import openpyxl.utils
+import openpyxl.utils.exceptions
 
 Visitors = {
 	"Student":{"A Number":"","Name":"", "Courses":[], "Visit Dates":[]},
@@ -146,8 +148,12 @@ class Date:
     # Save checkout time in visit, Return 1 for error
     def save_student_checkout(self, date, a_num, time_in, time_out):
         # Open Workbook and sheet
-        wb = openpyxl.load_workbook(self.path, read_only=False)
-        ws = wb["Date"]
+
+        try:
+            wb = openpyxl.load_workbook(self.path, read_only=False)
+            ws = wb["Date"]
+        except (IOError, openpyxl.utils.exceptions.InvalidFileException) as exception:
+            return (1, exception.__str__())
 
         max_row = self.get_max_row(ws)
         row = self.get_max_row(ws)
@@ -167,18 +173,21 @@ class Date:
         try:
             wb.save(self.path)
             wb.close()
-            return 0
-        except IOError:
+            return (0, 0)
+        except (IOError, openpyxl.utils.exceptions.InvalidFileException) as exception:
             wb.close()
-            return 1
+            return (1, exception.__str__())
 
 
     # Return All Visits for A number at date
     # visits = {"date":[[visit1],[visit1]], [[visit2],[visit2]]}
     def get_visits(self, a_num):
         # Open Workbook and sheet
-        wb = openpyxl.load_workbook(self.path, read_only=True)
-        ws = wb["Date"]
+        try:
+            wb = openpyxl.load_workbook(self.path, read_only=True)
+            ws = wb["Date"]
+        except (IOError, openpyxl.utils.exceptions.InvalidFileException) as exception:
+            return (1, exception.__str__())
 
         r=2
         visits = {"Date": [["Testing", "Course", "Section", "Calc #", "Time In", "Time Out"]]}
@@ -206,8 +215,14 @@ class Date:
             elif len(vals)>0:
                 visits[entry_date] = [vals]
             r+=1
-        wb.close()
-        return visits
+        
+        try:
+            
+            wb.close()
+            return visits
+        except (IOError, openpyxl.utils.exceptions.InvalidFileException) as exception:
+            wb.close()
+            return (1, exception.__str__())
 
     def get_max_row(self, ws):
         for max_row, row in enumerate(ws, 1):

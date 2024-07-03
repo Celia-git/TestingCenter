@@ -35,11 +35,18 @@ class DateTester(unittest.TestCase):
 
     def test_save_student_checkout(self):
         result = self.date.save_student_checkout('05/29/24', 'A00223332', '14:53', '18:13')
-        self.assertEqual(result, 0)
+        self.assertEqual(result, (0, 0))
+        self.date.path = "nothing"
+        result = self.date.save_student_checkout('05/29/24', 'A00223332', '14:53', '18:13')
+        self.assertEqual(result, (1, 'openpyxl does not support  file format, please check you can open it with Excel first. Supported formats are: .xlsx,.xlsm,.xltx,.xltm'))
+        self.date.path = data_path
 
     def test_get_visits(self):
         self.assertEqual(self.date.get_visits("A00123456"), {"Date":[['Testing', 'Course', 'Section', 'Calc #', 'Time In', 'Time Out']], "04/15/24":[['=FALSE()', '2110', 'N30', '0', '14:52', '16:18']]})
-
+        self.date.path = "nothing"
+        self.assertEqual(self.date.get_visits("A00123456"), (1, 'openpyxl does not support  file format, please check you can open it with Excel first. Supported formats are: .xlsx,.xlsm,.xltx,.xltm'))
+        self.date.path = data_path
+    
     def test_get_max_row(self):
         wb = openpyxl.load_workbook(data_path, read_only=True)
         ws = wb["Date"]
@@ -54,4 +61,12 @@ class DateTester(unittest.TestCase):
         self.assertEqual(self.date.month(8), 31)
 
 if __name__ == "__main__":
+    cov = coverage.Coverage()
+    cov.start()
+
     unittest.main()
+    
+    cov.stop()
+    cov.save()
+    cov.html_report(directory="html")
+    coverage.CoverageData()

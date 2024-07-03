@@ -277,29 +277,32 @@ class StudentFrame(tk.Frame):
 
         # Write past visits to Display_frame
         visits = self.date_log.get_visits(a_num)
-        self.display_frame.columnconfigure((0, len(visits.keys())), weight=1)
-        row=1
-        column=0
-        for date in visits.keys():
-            color = "white"
-            if isinstance(date, str):
-                date_label = tk.Label(self.display_frame, font=FONT, text=date, bg=backgrounds["blue"])
+        if type(visits)==dict:
+            self.display_frame.columnconfigure((0, len(visits.keys())), weight=1)
+            row=1
+            column=0
+            for date in visits.keys():
+                color = "white"
+                if isinstance(date, str):
+                    date_label = tk.Label(self.display_frame, font=FONT, text=date, bg=backgrounds["blue"])
+                else:
+                    date_label = tk.Label(self.display_frame, font=FONT, text="%s/%s/%s"%(date.month, date.day, date.year), bg=backgrounds["blue"])
+                date_label.grid(row=row, column=0, columnspan=len(visits[date][0]), sticky="EW", ipady=10)
+                # Iterate Visits at Date
+                for v in range(len(visits[date])):
+                    row +=1
+                    if v%2!=0:color="grey"
+                    # Iterate entries in Visit
+                    for entry in visits[date][v]:
+                        if "=" in entry:
+                            entry = entry.strip("()").strip("=")
+                        this_entry = tk.Label(self.display_frame, font=FONT, text=entry, width=len(entry)+4, justify=tk.CENTER, bg=backgrounds[color])
+                        this_entry.grid(row=row, column=column, sticky="EW")
+                        column +=1
+                    column = 0
+                row += 1
             else:
-                date_label = tk.Label(self.display_frame, font=FONT, text="%s/%s/%s"%(date.month, date.day, date.year), bg=backgrounds["blue"])
-            date_label.grid(row=row, column=0, columnspan=len(visits[date][0]), sticky="EW", ipady=10)
-            # Iterate Visits at Date
-            for v in range(len(visits[date])):
-                row +=1
-                if v%2!=0:color="grey"
-                # Iterate entries in Visit
-                for entry in visits[date][v]:
-                    if "=" in entry:
-                        entry = entry.strip("()").strip("=")
-                    this_entry = tk.Label(self.display_frame, font=FONT, text=entry, width=len(entry)+4, justify=tk.CENTER, bg=backgrounds[color])
-                    this_entry.grid(row=row, column=column, sticky="EW")
-                    column +=1
-                column = 0
-            row += 1
+                self.error_label.config(text="%s. \nMake sure %s is closed and a valid filepath"% (visits[1], data_path))
     
     def set_section_values(self, _event, *default):
         self.sec_value.delete(0, 'end')
@@ -496,12 +499,12 @@ class DateFrame(tk.Frame):
     def checkout_student(self, date, a_num, time_in):
         # Save all Values
         return_val = self.date_log.save_student_checkout(date, a_num, time_in, self.container.now.strftime('%H:%M'))     
-        if return_val==0:
+        if return_val[0]==0:
             # Refresh page
             self.display()
         else:
             # Show error Message
-            self.error_label.config(text="IOError when writing to file. \nMake sure %s is closed"%data_path)
+            self.error_label.config(text="%s. \nMake sure %s is closed and a valid filepath"% (return_val[1], data_path))
 
     def clear_display(self):
         for label in self.display_frame.grid_slaves():

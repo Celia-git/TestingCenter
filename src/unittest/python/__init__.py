@@ -1,5 +1,6 @@
 
 import sys
+import coverage
 
 sys.path.append("./././")
 
@@ -11,3 +12,5 @@ import openpyxl
 
 data_path = "src\\unittest\\data\\Visitors.xlsx"
 courses_path = "src\\unittest\\data\\Courses.txt"
+
+
