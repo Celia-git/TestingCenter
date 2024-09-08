@@ -6,8 +6,8 @@ from datetime import datetime
 import os
 import copy
 import openpyxl
-from .Date import Date, Visitors
-from .Student import Student
+from Date import Date, Visitors
+from Student import Student
 
 data_path = "data\\Visitors.xlsx"
 courses_path = "data\\Courses.txt"
