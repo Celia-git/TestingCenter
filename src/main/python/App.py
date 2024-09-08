@@ -301,9 +301,7 @@ class StudentFrame(tk.Frame):
                         column +=1
                     column = 0
                 row += 1
-            else:
-                self.error_label.config(text="%s. \nMake sure %s is closed and a valid filepath"% (visits[1], data_path))
-    
+       
     def set_section_values(self, _event, *default):
         self.sec_value.delete(0, 'end')
         if self.course.get() in self.all_courses:
