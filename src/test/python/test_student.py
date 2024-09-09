@@ -1,6 +1,6 @@
 import unittest
 
-from __init__ import *
+from .__init__ import *
 
 
 class StudentTester(unittest.TestCase):
@@ -27,5 +27,5 @@ class StudentTester(unittest.TestCase):
     def test_has_course(self):
         self.assertEqual(self.student.has_course(['2110', 'N30']), True)
 
-if __name__ == "__main__":
-    unittest.main()
+def run_tests():
+    unittest.main(argv=['first-arg-is-ignored'], exit=False)

@@ -10,7 +10,7 @@ from src.main.python.App import App
 import unittest
 import openpyxl
 
-data_path = "src\\unittest\\data\\Visitors.xlsx"
-courses_path = "src\\unittest\\data\\Courses.txt"
+data_path = "src\\test\\data\\Visitors.xlsx"
+courses_path = "src\\test\\data\\Courses.txt"
 
 

@@ -1,6 +1,6 @@
 import unittest
 
-from __init__ import *
+from .__init__ import *
 
 
 class AppTester(unittest.TestCase):
@@ -11,5 +11,5 @@ class AppTester(unittest.TestCase):
     
         
         
-if __name__ == "__main__":
-    unittest.main()
+def run_tests():
+    unittest.main(argv=['first-arg-is-ignored'], exit=False)

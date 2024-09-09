@@ -1,12 +1,15 @@
 
 
-from __init__ import *
+from .__init__ import *
 
 class DateTester(unittest.TestCase):
+
 
     def __init__(self, methodName: str = "runTest") -> None:
         super().__init__(methodName)
         self.date = Date(data_path)
+
+
 
     def test_load_data(self):
         data = self.date.load_data("05/29/24", 10)
@@ -60,13 +63,18 @@ class DateTester(unittest.TestCase):
     def test_month(self):
         self.assertEqual(self.date.month(8), 31)
 
-if __name__ == "__main__":
+
+def run_tests():
+    '''
     cov = coverage.Coverage()
     cov.start()
-
-    unittest.main()
+    '''
     
+    unittest.main(argv=['first-arg-is-ignored'], exit=False)
+    
+    '''
     cov.stop()
     cov.save()
     cov.html_report(directory="html")
     coverage.CoverageData()
+    '''
