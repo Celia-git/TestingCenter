@@ -7,3 +7,7 @@
 - View all visits in a certain date range
 - Read/Write Excel Files
 - In Progress: Unittesting
+
+- to run unittests (based on sample data in test directory) navigate to root project folder in command line
+    run ```python -m unittest discover src\test```
+- to run program, navigate to root project folder and run testing_center.py
