@@ -5,14 +5,21 @@ from .__init__ import *
 
 class AppTester(unittest.TestCase):
 
-    def __init__(self, methodName: str = "runTest") -> None:
-        super().__init__(methodName)
+    async def _start_app(self):
+        self.app.mainloop()
+
+    def setUp(self):
         self.app = App()
-    
-    def test_load_default_frame(self):
-        self.assertIsInstance(self.app.container_frame.load_default_frame(), tk.Frame)
+        self._start_app()
+
+    def tearDown(self) -> None:
+        self.app.destroy()
+
+    def test_startup(self):
+        title = self.app.winfo_toplevel().title()
+        expected = "Student Scanner"
+        self.assertEqual(title, expected)
 
 
-        
 def run_tests():
     unittest.main(argv=['first-arg-is-ignored'], exit=False)
