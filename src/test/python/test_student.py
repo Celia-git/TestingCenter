@@ -10,16 +10,16 @@ class StudentTester(unittest.TestCase):
         self.student = Student(data_path, "A00123456")
     
     def test_get_aNum(self):
-        self.assertEqual(self.student.get_aNum, "A00123456")
+        self.assertEqual(self.student.get_aNum(), "A00123456")
 
     def test_get_name(self):
-        self.assertEqual(self.student.get_name, "Finley Jones")
+        self.assertEqual(self.student.get_name(), "Finley Jones")
     
     def test_get_courses(self):
-        self.assertEqual(self.student.get_courses, [['2110', 'N30']])
+        self.assertEqual(self.student.get_courses(), [['2110', 'N30']])
     
     def test_get_visits(self):
-        self.assertEqual(self.student.get_visits, ['04/15/24'])
+        self.assertEqual(self.student.get_visits(), ['04/15/24'])
 
     def test_get_save_data(self):
         self.assertEqual(self.student.save_data(), 0)

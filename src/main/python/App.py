@@ -39,9 +39,9 @@ class App(tk.Tk):
         self.geometry("900x600")
 
         # popup the Window
-        container_frame = ContainerFrame(self)
-        container_frame.pack(padx=50, pady=50, fill=tk.BOTH, side=tk.TOP) 
-        container_frame.swap(0)
+        self.container_frame = ContainerFrame(self)
+        self.container_frame.pack(padx=50, pady=50, fill=tk.BOTH, side=tk.TOP) 
+        self.container_frame.swap(0)
 
 
 # Control Frame: Holds all sub frames

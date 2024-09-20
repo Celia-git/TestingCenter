@@ -9,7 +9,10 @@ class AppTester(unittest.TestCase):
         super().__init__(methodName)
         self.app = App()
     
-        
+    def test_load_default_frame(self):
+        self.assertIsInstance(self.app.container_frame.load_default_frame(), tk.Frame)
+
+
         
 def run_tests():
     unittest.main(argv=['first-arg-is-ignored'], exit=False)
