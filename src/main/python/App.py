@@ -218,7 +218,7 @@ class StudentFrame(tk.Frame):
         self.log_visit.columnconfigure((0,1,2), weight=1)
         self.log_visit.rowconfigure((0,1,2, 3), weight=1)
         a_label = tk.Label(self.log_visit, font=FONT, text="A Number: ", padx=5, pady=5)
-        a_value = tk.Label(self.log_visit, font=FONT, textvariable=self.container.a_num, padx=5, pady=5)
+        self.a_value = tk.Label(self.log_visit, font=FONT, textvariable=self.container.a_num, padx=5, pady=5)
         n_label = tk.Label(self.log_visit, font=FONT, text="Name: ", padx=5, pady=5)
         n_value = tk.Entry(self.log_visit, font=FONT, textvariable=self.name)
         cor_label = tk.Label(self.log_visit, font=FONT, text="Student's Courses: ", padx=5, pady=5)
@@ -231,7 +231,7 @@ class StudentFrame(tk.Frame):
         test_value = tk.Checkbutton(self.log_visit, font=FONT, text="Testing", variable=self.test)
         
         a_label.grid(row=0, column=0, columnspan=2)
-        a_value.grid(row=0, column=2, columnspan=2)
+        self.a_value.grid(row=0, column=2, columnspan=2)
         n_label.grid(row=1, column=0, columnspan=2)
         n_value.grid(row=1, column=2, columnspan=2)
         cor_label.grid(row=2, column=0)
@@ -295,6 +295,8 @@ class StudentFrame(tk.Frame):
                         column +=1
                     column = 0
                 row += 1
+                
+
 
         
     def write_courses(self):
@@ -302,18 +304,10 @@ class StudentFrame(tk.Frame):
         student_courses = self.student.get_courses()
         if student_courses:
             new_cor_vals = [c[0] for c in student_courses]+["---------------------"]+[c for c in self.all_courses]
-            '''
-            for c in student_courses:
-                new_cor_vals.append(c[0])
-            
-            new_cor_vals.append("---------------------")
-            for c in self.all_courses:
-                new_cor_vals.append(c)
-            '''
             self.cor_value.config(values=new_cor_vals)
             self.cor_value.set(new_cor_vals[0])
+            self.course.set(new_cor_vals[0])
             self.set_section_values("", student_courses[0][1])
-        
 
 
     def set_section_values(self, _event, *default):
@@ -323,6 +317,7 @@ class StudentFrame(tk.Frame):
             self.sec_value.set(default)
         else:
             self.sec_value.config(values=[])
+        
     
     # Reset the scroll region
     def onFrameConfigure(self, event):
@@ -388,6 +383,7 @@ class StudentFrame(tk.Frame):
         self.section.set("")
         self.calc.set(0)
         self.test.set(True)
+        [child.destroy() for child in self.display_frame.winfo_children()]
         self.error_label.config(text="")
         # Reset display frame
         for label in self.display_frame.grid_slaves():

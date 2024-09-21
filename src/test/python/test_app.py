@@ -1,5 +1,4 @@
 import unittest
-import logging
 
 from .__init__ import *
 
@@ -77,28 +76,39 @@ class AppTester(unittest.TestCase):
         self.default_frame.view_but.invoke()
         self.assertEqual(self.container_frame.top_frame, self.date_frame)
 
+    def test_load_student(self):
+        self.student_frame.discard(True)
+        self.container_frame.a_num.set("A00444555")
+        self.container_frame.load_student_frame()
+        self.assertIsInstance(self.student_frame.student, Student)
+        self.assertIsInstance(self.student_frame.date_log, Date)
+        self.assertEqual(self.container_frame.a_num.get(), "A00444555")
+        self.assertEqual(self.student_frame.name.get(), "Morgan Curry")
+
     # Test load_student-> course_values
     def test_write_courses(self):
-        log = logging.getLogger("AppTester.test_write_courses")
-        log.debug("this- %r", self.student_frame)
-        self.student_frame.load_student("A00444555")
+        self.student_frame.discard(True)
+        self.container_frame.a_num.set("A00444555")
+        self.container_frame.load_student_frame()
         self.assertEqual(self.student_frame.cor_value["values"], ('1910', '---------------------', '1030', '1130', '1710', '1720', '1910', '1920', '2010', '2110'))
         self.assertEqual(self.student_frame.sec_value["values"], ('N30', 'N35'))
 
     def test_write_visits(self):
+        self.student_frame.discard(True)
         self.student_frame.load_student("A00444555")
         label_text = ['Date', 'Testing', 'Course', 'Section', 'Calc #', 'Time In', 'Time Out', '03/08/24', 'TRUE', '1910', 'N35\n', '1', '13:59', '17:00', '04/10/24', 'TRUE', '1910', 'N35', '12', '14:51', '15:56', '04/17/24', 'TRUE', '1910', 'N35', '0', '13:17', '17:13']
         self.assertEqual([x.cget("text") for x in self.student_frame.display_frame.winfo_children()], label_text)
 
+    def test_save_student_values(self):
+        pass
 
+    def test_discard_student_entries(self):
+        pass
 
-    # Teest load_student-> 
 
     def tearDown(self) -> None:
         self.app.destroy()
 
 
 def run_tests():
-    logging.basicConfig(stream=sys.stderr)
-    logging.getLogger("AppTester.test_write_courses").setLevel(logging.DEBUG)
     unittest.main(argv=['first-arg-is-ignored'], exit=False)
