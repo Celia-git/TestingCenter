@@ -66,6 +66,7 @@ class ContainerFrame(tk.Frame):
         self.default_frame = DefaultFrame(self)
         self.student_frame = StudentFrame(self)
         self.date_frame = DateFrame(self)
+        self.top_frame = self.load_default_frame()
         self.time()
 
     # Refresh time clock
@@ -110,9 +111,10 @@ class ContainerFrame(tk.Frame):
 
         }
         next = switch.get(frame_idx, "Invalid Window Index")
-        top_frame = next()
-        top_frame.pack(padx=25, pady=25, side=tk.TOP, fill=tk.BOTH, expand=True)
-        
+        self.top_frame = next()
+        self.top_frame.pack(padx=25, pady=25, side=tk.TOP, fill=tk.BOTH, expand=True)
+    
+
     # Returns true if string is A00 followed by six digits
     def is_valid_Anumber(self):
         string_anumber = self.a_num.get()
@@ -142,16 +144,16 @@ class DefaultFrame(tk.Frame):
         a_label = tk.Label(self, text="A Number:", font=FONT, pady=10)
         v_label = tk.Label(self, text="View Logs by Date:", font=FONT, pady=10)
         self.entry = tk.Entry(self, textvariable=self.container.a_num, font=FONT)
-        view_but = tk.Button(self, text="Logs", font=FONT, command=self.view, pady=10)
-        submit_but = tk.Button(self, text="Go", font=FONT, command=self.submit, pady=10)
+        self.view_but = tk.Button(self, text="Logs", font=FONT, command=self.view, pady=10)
+        self.submit_but = tk.Button(self, text="Go", font=FONT, command=self.submit, pady=10)
         self.entry.bind("<Return>", self.submit)
 
         # Place widgets
         a_label.grid(row=0, column=2)
         v_label.grid(row=2, column=2)
         self.entry.grid(row=0, column=3)
-        view_but.grid(row=2, column=3)
-        submit_but.grid(row=0, column=4)
+        self.view_but.grid(row=2, column=3)
+        self.submit_but.grid(row=0, column=4)
         self.error_label.grid(row=3, column=1, columnspan=3)
 
         
@@ -261,22 +263,14 @@ class StudentFrame(tk.Frame):
         self.name.set(self.student.get_name())
         self.test.set(True)
         
-        # Write Student Courses and Sections to Entry Fields
-        student_courses = self.student.get_courses()
-        if student_courses:
-            new_cor_vals = []
-            for c in student_courses:
-                new_cor_vals.append(c[0])
-            new_cor_vals.append("---------------------")
-            for c in self.all_courses:
-                new_cor_vals.append(c)
+        self.write_courses()
 
-            self.cor_value.config(values=new_cor_vals)
-            self.cor_value.set(new_cor_vals[0])
-            self.set_section_values("", student_courses[0][1])
+        self.write_visits()
 
+    
+    def write_visits(self):
         # Write past visits to Display_frame
-        visits = self.date_log.get_visits(a_num)
+        visits = self.date_log.get_visits(self.container.a_num.get())
         if type(visits)==dict:
             self.display_frame.columnconfigure((0, len(visits.keys())), weight=1)
             row=1
@@ -301,7 +295,27 @@ class StudentFrame(tk.Frame):
                         column +=1
                     column = 0
                 row += 1
-       
+
+        
+    def write_courses(self):
+        # Write Student Courses and Sections to Entry Fields
+        student_courses = self.student.get_courses()
+        if student_courses:
+            new_cor_vals = [c[0] for c in student_courses]+["---------------------"]+[c for c in self.all_courses]
+            '''
+            for c in student_courses:
+                new_cor_vals.append(c[0])
+            
+            new_cor_vals.append("---------------------")
+            for c in self.all_courses:
+                new_cor_vals.append(c)
+            '''
+            self.cor_value.config(values=new_cor_vals)
+            self.cor_value.set(new_cor_vals[0])
+            self.set_section_values("", student_courses[0][1])
+        
+
+
     def set_section_values(self, _event, *default):
         self.sec_value.delete(0, 'end')
         if self.course.get() in self.all_courses:
